@@ -5,12 +5,11 @@ $(TARGET_DIR)/%: %/main.c
 	mkdir -p $(TARGET_DIR)
 	gcc $< -o $@
 
-.PHONY: $(PROJECTS)
-$(PROJECTS): %: $(TARGET_DIR)/%
+ado1: build/ado1
 
 all: $(PROJECTS)
 
 clean:
 	rm -rf $(TARGET_DIR)
 
-.PHONY: all clean
+.PHONY: all clean $(PROJECTS)
