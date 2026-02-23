@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
   unsigned char byte;
   // fread sempre avança 1. Se não for 1, é EOF
   while (fread(&byte, 1, 1, file_ptr) == 1) {
+    int current_file_pos = ftell(file_ptr);
     switch ((NeanderInstruction)byte) {
     case NOP:
       printf("NOP Detected.\n");
