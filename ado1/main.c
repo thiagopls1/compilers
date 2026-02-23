@@ -30,9 +30,8 @@ long get_file_size(const char *filename) {
   long size = 0;
   FILE *file_ptr = fopen(filename, "rb");
 
-  if (file_ptr == NULL) {
+  if (file_ptr == NULL)
     return -1;
-  }
 
   if (fseek(file_ptr, 0L, SEEK_END) == 0)
     size = ftell(file_ptr);
