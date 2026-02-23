@@ -26,6 +26,23 @@ bool is_flag_zero() { return acc == 0; }
 
 bool is_flag_negative() { return acc < 0; }
 
+long get_file_size(const char *filename) {
+  long size = 0;
+  FILE *file_ptr = fopen(filename, "rb");
+
+  if (file_ptr == NULL) {
+    return -1;
+  }
+
+  if (fseek(file_ptr, 0L, SEEK_END) == 0)
+    size = ftell(file_ptr);
+  else
+    return -1;
+
+  fclose(file_ptr);
+  return size;
+}
+
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
     printf("Erro: Nenhum arquivo foi passado como parâmetro!\n");
@@ -38,6 +55,13 @@ int main(int argc, char *argv[]) {
   if (file_ptr == NULL) {
     printf("Erro: não foi possível abrir o arquivo %s.\n", argv[1]);
     printf("\tVerifique se o arquivo existe ou se há permissão de leitura.\n");
+    return 1;
+  }
+
+  long file_size = get_file_size(argv[1]);
+
+  if (file_size < 0 || file_size > 256) {
+    printf("Erro: tamanho inválido do arquivo %s (%ld).\n", argv[1], file_size);
     return 1;
   }
 
