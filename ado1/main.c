@@ -110,5 +110,14 @@ int main(int argc, char *argv[]) {
   }
 
   fclose(file_ptr);
+
+  printf("\n");
+  printf("Execução finalizada.\n");
+  printf("----------------------------------\n");
+  printf("Acc: %d\n", acc);
+  printf("Program Counter: %d\n", p_counter);
+  printf("Flag Z: %d\n", is_flag_zero());
+  printf("Flag N: %d\n", is_flag_negative());
+
   return 0;
 }
