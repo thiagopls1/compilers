@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 
 const int BIT_SIZE = 8;
@@ -17,6 +18,13 @@ typedef enum {
   JZ = 160,  // JMP caso seja zero
   HTL = 240  // Termina a execução
 } NeanderInstruction;
+
+int acc = 0;
+int p_counter = 0;
+
+bool is_flag_zero() { return acc == 0; }
+
+bool is_flag_negative() { return acc < 0; }
 
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
