@@ -17,7 +17,21 @@ typedef enum {
   HTL = 240
 } NianderInstruction;
 
-int main() {
+int main(int argc, char *argv[]) {
+  if (argc <= 1) {
+    printf("Erro: Nenhum arquivo foi passado como parâmetro!\n");
+    printf("\tUso: ./build/ado1 <ARQUIVO>");
+    return 1;
+  }
+
+  FILE *file_ptr = fopen(argv[1], "r");
+
+  if (file_ptr == NULL) {
+    printf("Erro: não foi possível abrir o arquivo %s.\n", argv[1]);
+    printf("\tVerifique se o arquivo existe.");
+    return 1;
+  }
+
   printf("Hello, world!");
   return 0;
 }
