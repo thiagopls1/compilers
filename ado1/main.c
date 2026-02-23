@@ -3,18 +3,19 @@
 const int BIT_SIZE = 8;
 const int MEM_MAX_POSITIONS = 256;
 
+// X = Próxima posição após instrução
 typedef enum {
-  NOP = 0,
-  STA = 16,
-  LDA = 32,
-  ADD = 48,
-  OR = 64,
-  AND = 80,
-  NOT = 96,
-  JMP = 128,
-  JN = 144,
-  JZ = 160,
-  HTL = 240
+  NOP = 0,   // Não faz nada (Pula instrução)
+  STA = 16,  // Guarda o acumulador na pos. X
+  LDA = 32,  // Guarda no acumulador o valor da pos. X
+  ADD = 48,  // Soma no acumulador o valor da pos. X
+  OR = 64,   // Compara o acumulador e o valor da pos. X
+  AND = 80,  // Compara o acumulador e o valor da pos. X
+  NOT = 96,  // Inverte os bits do acumulador
+  JMP = 128, // Desvia a execução para a pos. X
+  JN = 144,  // JMP caso seja negativo
+  JZ = 160,  // JMP caso seja zero
+  HTL = 240  // Termina a execução
 } NianderInstruction;
 
 int main(int argc, char *argv[]) {
