@@ -16,7 +16,7 @@ typedef enum {
   JN = 144,  // JMP caso seja negativo
   JZ = 160,  // JMP caso seja zero
   HTL = 240  // Termina a execução
-} NianderInstruction;
+} NeanderInstruction;
 
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
