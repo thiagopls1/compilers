@@ -29,7 +29,7 @@ bool is_flag_negative() { return acc < 0; }
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
     printf("Erro: Nenhum arquivo foi passado como parâmetro!\n");
-    printf("\tUso: ./build/ado1 <ARQUIVO>");
+    printf("\tUso: ./build/ado1 <ARQUIVO>\n");
     return 1;
   }
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 
   if (file_ptr == NULL) {
     printf("Erro: não foi possível abrir o arquivo %s.\n", argv[1]);
-    printf("\tVerifique se o arquivo existe.");
+    printf("\tVerifique se o arquivo existe ou se há permissão de leitura.\n");
     return 1;
   }
 
