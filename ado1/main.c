@@ -1,123 +1,38 @@
+#include "neander.h"
 #include <stdbool.h>
 #include <stdio.h>
-
-const int BIT_SIZE = 8;
-const int MEM_MAX_POSITIONS = 256;
-
-// X = Próxima posição após instrução
-typedef enum {
-  NOP = 0,   // Não faz nada (Pula instrução)
-  STA = 16,  // Guarda o acumulador na pos. X
-  LDA = 32,  // Guarda no acumulador o valor da pos. X
-  ADD = 48,  // Soma no acumulador o valor da pos. X
-  OR = 64,   // Compara o acumulador e o valor da pos. X
-  AND = 80,  // Compara o acumulador e o valor da pos. X
-  NOT = 96,  // Inverte os bits do acumulador
-  JMP = 128, // Desvia a execução para a pos. X
-  JN = 144,  // JMP caso seja negativo
-  JZ = 160,  // JMP caso seja zero
-  HLT = 240  // Termina a execução
-} NeanderInstruction;
-
-int acc = 0;
-int p_counter = 0;
-
-bool is_flag_zero() { return acc == 0; }
-
-bool is_flag_negative() { return acc < 0; }
-
-long get_file_size(const char *filename) {
-  long size = 0;
-  FILE *file_ptr = fopen(filename, "rb");
-
-  if (file_ptr == NULL)
-    return -1;
-
-  if (fseek(file_ptr, 0L, SEEK_END) == 0)
-    size = ftell(file_ptr);
-  else
-    return -1;
-
-  fclose(file_ptr);
-  return size;
-}
+#include <string.h>
 
 int main(int argc, char *argv[]) {
-  if (argc <= 1) {
-    printf("Erro: Nenhum arquivo foi passado como parâmetro!\n");
-    printf("\tUso: ./build/ado1 <ARQUIVO>\n");
+  if (argc < 2) { // Checa se recebeu o arquivo do programa
+    printf("Sintaxe incorreta. Deve-se seguir o modelo: %s programa.mem [--hex "
+           "| --dec]\n",
+           argv[0]);
     return 1;
   }
 
-  FILE *file_ptr = fopen(argv[1], "rb");
+  int hex_mode = 0;
 
-  if (file_ptr == NULL) {
-    printf("Erro: não foi possível abrir o arquivo %s.\n", argv[1]);
-    printf("\tVerifique se o arquivo existe ou se há permissão de leitura.\n");
+  if (argc >= 3 &&
+      strcmp(argv[2], "--hex") == 0) { // Ativa o modo hexadecimal se forem = 0
+    hex_mode = 1;
+  }
+
+  Neander n;
+  neander_init(&n);
+
+  if (!neander_load_program(&n, argv[1])) {
+    printf("Erro ao carregar o arquivo\n");
     return 1;
   }
 
-  long file_size = get_file_size(argv[1]);
+  printf("Memória antes: \n");
+  neander_print_mem(n.original_mem, hex_mode);
 
-  if (file_size < 0 || file_size > 256) {
-    printf("Erro: tamanho inválido do arquivo %s (%ld).\n", argv[1], file_size);
-    return 1;
-  }
+  printf("Memória depois: \n");
+  neander_print_mem(n.mem, hex_mode);
 
-  unsigned char byte;
-  // fread sempre avança 1. Se não for 1, é EOF
-  while (fread(&byte, 1, 1, file_ptr) == 1) {
-    int current_file_pos = ftell(file_ptr);
-    switch ((NeanderInstruction)byte) {
-    case NOP:
-      printf("NOP Detected.\n");
-      continue;
-    case STA:
-      printf("STA Detected.\n");
-      continue;
-    case LDA:
-      printf("LDA Detected.\n");
-      continue;
-    case ADD:
-      printf("ADD Detected.\n");
-      continue;
-    case OR:
-      printf("OR Detected.\n");
-      continue;
-    case AND:
-      printf("AND Detected.\n");
-      continue;
-    case NOT:
-      printf("NOT Detected.\n");
-      continue;
-    case JMP:
-      printf("JMP Detected.\n");
-      continue;
-    case JN:
-      printf("JN Detected.\n");
-      continue;
-    case JZ:
-      printf("JZ Detected.\n");
-      continue;
-    case HLT:
-      printf("HLT Detected.\n");
-      break;
-    default:
-      printf("%u Detected.\n", byte);
-      continue;
-    }
-    break;
-  }
-
-  fclose(file_ptr);
-
-  printf("\n");
-  printf("Execução finalizada.\n");
-  printf("----------------------------------\n");
-  printf("Acc: %d\n", acc);
-  printf("Program Counter: %d\n", p_counter);
-  printf("Flag Z: %d\n", is_flag_zero());
-  printf("Flag N: %d\n", is_flag_negative());
+  neander_print_state(&n, hex_mode);
 
   return 0;
 }
