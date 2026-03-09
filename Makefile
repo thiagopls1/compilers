@@ -1,9 +1,10 @@
 TARGET_DIR = ./build
 PROJECTS = ado1
 
-$(TARGET_DIR)/%: %/main.c
+.SECONDEXPANSION:
+$(TARGET_DIR)/%: $$(wildcard %/*.c)
 	mkdir -p $(TARGET_DIR)
-	gcc $< -o $@
+	gcc $^ -o $@
 
 ado1: build/ado1
 
