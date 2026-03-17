@@ -1,5 +1,5 @@
 TARGET_DIR = ./build
-PROJECTS = ado1
+PROJECTS = ado1 ex_aula5
 
 .SECONDEXPANSION:
 $(TARGET_DIR)/%: $$(wildcard %/*.c)
@@ -7,6 +7,8 @@ $(TARGET_DIR)/%: $$(wildcard %/*.c)
 	gcc $^ -o $@
 
 ado1: build/ado1
+
+ex_aula5: build/ex_aula5
 
 all: $(PROJECTS)
 
