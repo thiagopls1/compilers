@@ -74,6 +74,7 @@ int main(int argc, char *argv[]) {
   Token *tokens = malloc(strlen(argv[1]) * sizeof(Token));
 
   int tokens_count = 0;
+  // Quem lida com o avanço dos ponteiros são as funções handle
   while (*str_pointer != '\0') {
     if (isnumber(*str_pointer)) {
       handleDigit(&str_pointer, tokens, tokens_count);
