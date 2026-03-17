@@ -23,15 +23,27 @@ bool isnumber(char character) {
   return (char *)strchr(numbers, character) != NULL;
 }
 
-void handleDigit(char *str_pointer, Token *tokens, int tokens_count) {
-  char *start_pointer = str_pointer;
+void handleDigit(char **str_pointer, Token *tokens, int tokens_count) {
+  char *start_pointer = *str_pointer;
+  char *current_pointer = *str_pointer;
   int token_length = 0;
-  while (isnumber(*str_pointer) && *str_pointer != '\0') {
+  while (isnumber(*current_pointer) && *current_pointer != '\0') {
+    current_pointer = *str_pointer;
     token_length++;
-    str_pointer++;
+    current_pointer++;
+    *str_pointer = current_pointer;
   }
 
-  printf("Token length: %d\n", token_length);
+  char *token_value = malloc(token_length * sizeof(char));
+
+  for (int i = 0; i < token_length; i++) {
+    token_value[i] = *start_pointer;
+    start_pointer++;
+  }
+
+  Token new_token = {.type = NUM};
+  new_token.value = token_value;
+  tokens[tokens_count] = new_token;
 }
 
 void handleOperator(char *str_pointer, Token *tokens, int tokens_count) {
@@ -52,18 +64,16 @@ int main(int argc, char *argv[]) {
   }
 
   char *str_pointer = argv[1];
-  Token tokens[strlen(str_pointer)];
+  Token *tokens = malloc(strlen(argv[1]) * sizeof(Token));
 
   int tokens_count = 0;
   while (*str_pointer != '\0') {
     if (isnumber(*str_pointer)) {
-      // printf("Dígito detectado!\n");
-      // handleDigit(str_pointer, tokens, tokens_count);
-      // tokens_count++;
+      handleDigit(&str_pointer, tokens, tokens_count);
+      tokens_count++;
     }
 
     if (isoperator(*str_pointer)) {
-      // printf("Operador detectado!\n");
       handleOperator(str_pointer, tokens, tokens_count);
       tokens_count++;
     }
@@ -72,9 +82,12 @@ int main(int argc, char *argv[]) {
   }
 
   for (int i = 0; i < tokens_count; i++) {
-    printf("%s\n", tokens[i].value);
+    // Se chegou no NULL, significa que acabou
+    if (&tokens[i] == NULL) {
+      break;
+    }
+    printf("Token %d: TIPO: %d, VALOR: %s\n", i, tokens[i].type,
+           tokens[i].value);
   }
-
-  printf("\n");
   return 0;
 }
