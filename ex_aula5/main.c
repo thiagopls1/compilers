@@ -74,13 +74,12 @@ char *token_type_str(TokenType type) {
 }
 
 int main(int argc, char *argv[]) {
-  ExitCode exit_code = OK;
   if (argc <= 1) {
     printf("Erro: necessário passar parâmetro!\n");
-    exit_code = INVALID_PARAM;
-    return exit_code;
+    return INVALID_PARAM;
   }
 
+  ExitCode exit_code;
   char *str_pointer = argv[1];
   Token *tokens = malloc(strlen(argv[1]) * sizeof(Token));
 
@@ -106,7 +105,7 @@ int main(int argc, char *argv[]) {
 
   if (*str_pointer != '\0') {
     printf("Erro: token inesperado '%c'\n", *str_pointer);
-    exit_code = 1;
+    exit_code = UNEXPECTED_TOKEN;
   } else {
     for (int i = 0; i < tokens_count; i++) {
       // Se chegou no NULL, significa que acabou
