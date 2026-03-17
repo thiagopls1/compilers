@@ -62,6 +62,17 @@ void handleOperator(char **str_pointer, Token *tokens, int tokens_count) {
   (*str_pointer)++;
 }
 
+char *token_type_str(TokenType type) {
+  switch (type) {
+  case OP:
+    return "OP";
+  case NUM:
+    return "NUM";
+  default:
+    return "DESC.";
+  }
+}
+
 int main(int argc, char *argv[]) {
   ExitCode exit_code = OK;
   if (argc <= 1) {
@@ -102,8 +113,8 @@ int main(int argc, char *argv[]) {
       if (&tokens[i] == NULL) {
         break;
       }
-      printf("Token %d: TIPO: %d, VALOR: %s\n", i, tokens[i].type,
-             tokens[i].value);
+      printf("Token %d: TIPO: %s, VALOR: %s\n", i,
+             token_type_str(tokens[i].type), tokens[i].value);
     }
   }
 
