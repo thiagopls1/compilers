@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +18,21 @@ bool isoperator(char character) {
   return (char *)strchr(operators, character) != NULL;
 }
 
-void handleDigit() {}
+bool isnumber(char character) {
+  char *numbers = "1234567890";
+  return (char *)strchr(numbers, character) != NULL;
+}
+
+void handleDigit(char *str_pointer, Token *tokens, int tokens_count) {
+  char *start_pointer = str_pointer;
+  int token_length = 0;
+  while (isnumber(*str_pointer) && *str_pointer != '\0') {
+    token_length++;
+    str_pointer++;
+  }
+
+  printf("Token length: %d\n", token_length);
+}
 
 void handleOperator(char *str_pointer, Token *tokens, int tokens_count) {
   char *token_value = (char *)malloc(sizeof(char));
@@ -30,7 +43,6 @@ void handleOperator(char *str_pointer, Token *tokens, int tokens_count) {
   new_token.value = token_value;
 
   tokens[tokens_count] = new_token;
-  str_pointer++;
 }
 
 int main(int argc, char *argv[]) {
@@ -44,13 +56,14 @@ int main(int argc, char *argv[]) {
 
   int tokens_count = 0;
   while (*str_pointer != '\0') {
-    if (isdigit(*str_pointer)) {
-      printf("Dígito detectado!\n");
+    if (isnumber(*str_pointer)) {
+      // printf("Dígito detectado!\n");
+      // handleDigit(str_pointer, tokens, tokens_count);
       // tokens_count++;
     }
 
     if (isoperator(*str_pointer)) {
-      printf("Operador detectado!\n");
+      // printf("Operador detectado!\n");
       handleOperator(str_pointer, tokens, tokens_count);
       tokens_count++;
     }
