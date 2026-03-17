@@ -4,6 +4,12 @@
 #include <string.h>
 
 typedef enum {
+  OK = 0,
+  INVALID_PARAM = 1,
+  UNEXPECTED_TOKEN = 2,
+} ExitCode;
+
+typedef enum {
   OP = 1,
   NUM = 2,
 } TokenType;
@@ -44,24 +50,26 @@ void handleDigit(char **str_pointer, Token *tokens, int tokens_count) {
   };
 }
 
-void handleOperator(char *str_pointer, Token *tokens, int tokens_count) {
+void handleOperator(char **str_pointer, Token *tokens, int tokens_count) {
   char *token_value = (char *)malloc(sizeof(char));
-  *token_value = *str_pointer;
+  *token_value = **str_pointer;
   Token new_token = {
       .type = OP,
   };
   new_token.value = token_value;
 
   tokens[tokens_count] = new_token;
+  (*str_pointer)++;
 }
 
 int main(int argc, char *argv[]) {
+  ExitCode exit_code = OK;
   if (argc <= 1) {
     printf("Erro: necessário passar parâmetro!\n");
-    return 1;
+    exit_code = INVALID_PARAM;
+    return exit_code;
   }
 
-  int exit_code = 0;
   char *str_pointer = argv[1];
   Token *tokens = malloc(strlen(argv[1]) * sizeof(Token));
 
@@ -74,9 +82,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (isoperator(*str_pointer)) {
-      handleOperator(str_pointer, tokens, tokens_count);
+      handleOperator(&str_pointer, tokens, tokens_count);
       tokens_count++;
-      str_pointer++;
       continue;
     }
 
